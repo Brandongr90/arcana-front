@@ -1,0 +1,294 @@
+<header class="header-container">
+  <!-- Animated Stars Background (reducido para header) -->
+  <div class="fixed inset-0 pointer-events-none z-0 stars-background">
+    <div class="star small" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="star small" style="top: 30%; left: 85%; animation-delay: 1s;"></div>
+    <div class="star small" style="top: 60%; left: 25%; animation-delay: 1.5s;"></div>
+    <div class="star small" style="top: 70%; left: 75%; animation-delay: 0.5s;"></div>
+    <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 2s;"></div>
+    <div class="sparkle" style="top: 80%; left: 60%; animation-delay: 1.2s;"></div>
+  </div>
+
+  <!-- Main Navigation Container -->
+  <nav class="navbar-container relative z-10" [class.scrolled]="isScrolled()">
+    
+    <!-- Left Navigation Links -->
+    <div class="navbar-left">
+      <div class="nav-links-container">
+        <!-- Disciplinas Dropdown -->
+        <div class="nav-dropdown" (mouseenter)="showDropdown('disciplines')" (mouseleave)="hideDropdown('disciplines')">
+          <button class="nav-link dropdown-trigger" [class.active]="activeDropdown() === 'disciplines'">
+            <i class="fas fa-sparkles nav-icon"></i>
+            <span class="nav-text">Disciplinas</span>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+          </button>
+          
+          <div class="dropdown-menu" *ngIf="activeDropdown() === 'disciplines'">
+            <a *ngFor="let discipline of disciplines()" 
+               class="dropdown-item" 
+               (click)="navigateTo('/disciplines/' + discipline.id)">
+              <span class="dropdown-icon">{{ discipline.icon }}</span>
+              <div class="dropdown-content">
+                <span class="dropdown-title">{{ discipline.name }}</span>
+                <span class="dropdown-description">{{ discipline.description }}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Cursos -->
+        <button class="nav-link" (click)="navigateTo('/courses')" [class.active]="isActiveRoute('/courses')">
+          <i class="fas fa-graduation-cap nav-icon"></i>
+          <span class="nav-text">Cursos</span>
+        </button>
+
+        <!-- Consultas -->
+        <button class="nav-link" (click)="navigateTo('/consultations')" [class.active]="isActiveRoute('/consultations')">
+          <i class="fas fa-crystal-ball nav-icon"></i>
+          <span class="nav-text">Consultas</span>
+        </button>
+
+        <!-- Herramientas Dropdown -->
+        <div class="nav-dropdown" (mouseenter)="showDropdown('tools')" (mouseleave)="hideDropdown('tools')">
+          <button class="nav-link dropdown-trigger" [class.active]="activeDropdown() === 'tools' || isActiveRoute('/tools')">
+            <i class="fas fa-magic nav-icon"></i>
+            <span class="nav-text">Herramientas</span>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+          </button>
+          
+          <div class="dropdown-menu" *ngIf="activeDropdown() === 'tools'">
+            <a class="dropdown-item" (click)="navigateTo('/tools/tarot')">
+              <span class="dropdown-icon">🃏</span>
+              <div class="dropdown-content">
+                <span class="dropdown-title">Lectura de Tarot</span>
+                <span class="dropdown-description">Descubre tu destino</span>
+              </div>
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/tools/runes')">
+              <span class="dropdown-icon">ᚱ</span>
+              <div class="dropdown-content">
+                <span class="dropdown-title">Runas Vikingas</span>
+                <span class="dropdown-description">Sabiduría ancestral</span>
+              </div>
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/tools/fortune-cookie')">
+              <span class="dropdown-icon">🥠</span>
+              <div class="dropdown-content">
+                <span class="dropdown-title">Galleta de la Fortuna</span>
+                <span class="dropdown-description">Mensaje del día</span>
+              </div>
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/lunar-calendar')">
+              <span class="dropdown-icon">🌙</span>
+              <div class="dropdown-content">
+                <span class="dropdown-title">Calendario Lunar</span>
+                <span class="dropdown-description">Fases lunares</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Logo -->
+    <div class="navbar-center">
+      <div class="logo-container" (click)="navigateTo('/dashboard')">
+        <img 
+          src="../../../../assets/logo/logo-arcana.png" 
+          alt="Arcana Logo" 
+          class="logo-image"
+          [class.animate-glow]="true"
+        >
+      </div>
+    </div>
+
+    <!-- Right User Menu & Actions -->
+    <div class="navbar-right">
+      <div class="user-actions-container">
+        
+        <!-- Notifications -->
+        <div class="notification-container" (click)="toggleNotifications()">
+          <button class="action-button notification-btn" [class.has-notifications]="unreadNotifications() > 0">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" *ngIf="unreadNotifications() > 0">{{ unreadNotifications() }}</span>
+          </button>
+          
+          <!-- Notifications Dropdown -->
+          <div class="notifications-dropdown" *ngIf="showNotifications()">
+            <div class="notifications-header">
+              <h4>Notificaciones</h4>
+              <button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadNotifications() > 0">
+                Marcar todas como leídas
+              </button>
+            </div>
+            <div class="notifications-list">
+              <div *ngFor="let notification of recentNotifications()" 
+                   class="notification-item" 
+                   [class.unread]="!notification.read">
+                <div class="notification-icon">{{ notification.icon }}</div>
+                <div class="notification-content">
+                  <span class="notification-title">{{ notification.title }}</span>
+                  <span class="notification-time">{{ formatTime(notification.date) }}</span>
+                </div>
+              </div>
+              <div class="notifications-footer">
+                <button class="view-all-notifications" (click)="navigateTo('/notifications')">
+                  Ver todas las notificaciones
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <button class="action-button" (click)="navigateTo('/messaging')" [class.active]="isActiveRoute('/messaging')">
+          <i class="fas fa-envelope"></i>
+          <span class="message-badge" *ngIf="unreadMessages() > 0">{{ unreadMessages() }}</span>
+        </button>
+
+        <!-- Premium Status -->
+        <div class="premium-indicator" *ngIf="user()?.subscription?.status === 'active'">
+          <i class="fas fa-crown premium-crown"></i>
+          <span class="premium-text">Premium</span>
+        </div>
+
+        <!-- User Menu Dropdown -->
+        <div class="user-dropdown" (mouseenter)="showDropdown('user')" (mouseleave)="hideDropdown('user')">
+          <button class="user-menu-trigger" [class.active]="activeDropdown() === 'user'">
+            <div class="user-avatar">
+              <img *ngIf="user()?.avatar_url; else defaultAvatar" 
+                   [src]="user()?.avatar_url" 
+                   [alt]="user()?.nombre"
+                   class="avatar-image">
+              <ng-template #defaultAvatar>
+                <div class="default-avatar">
+                  {{ getInitials() }}
+                </div>
+              </ng-template>
+            </div>
+            <div class="user-info">
+              <span class="user-name">{{ user()?.nombre }}</span>
+              <span class="user-role">{{ getUserRole() }}</span>
+            </div>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+          </button>
+
+          <!-- User Dropdown Menu -->
+          <div class="dropdown-menu user-menu" *ngIf="activeDropdown() === 'user'">
+            <div class="user-menu-header">
+              <div class="user-details">
+                <strong>{{ user()?.nombre }} {{ user()?.apellido }}</strong>
+                <span class="user-email">{{ user()?.email }}</span>
+                <span class="user-zodiac" *ngIf="user()?.signo_zodiacal">
+                  {{ getZodiacIcon() }} {{ getZodiacName() }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="menu-divider"></div>
+            
+            <a class="dropdown-item" (click)="navigateTo('/profile')">
+              <i class="fas fa-user dropdown-item-icon"></i>
+              <span>Mi Perfil</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="navigateTo('/profile/progress')">
+              <i class="fas fa-chart-line dropdown-item-icon"></i>
+              <span>Mi Progreso</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="navigateTo('/profile/appointments')">
+              <i class="fas fa-calendar dropdown-item-icon"></i>
+              <span>Mis Citas</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="navigateTo('/subscriptions')" *ngIf="!isPremium()">
+              <i class="fas fa-crown dropdown-item-icon"></i>
+              <span>Obtener Premium</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="navigateTo('/profile/subscription')" *ngIf="isPremium()">
+              <i class="fas fa-crown dropdown-item-icon premium-icon"></i>
+              <span>Gestionar Suscripción</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <a class="dropdown-item" (click)="navigateTo('/settings')">
+              <i class="fas fa-cog dropdown-item-icon"></i>
+              <span>Configuración</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="navigateTo('/help')">
+              <i class="fas fa-question-circle dropdown-item-icon"></i>
+              <span>Ayuda</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <button class="dropdown-item logout-item" (click)="logout()">
+              <i class="fas fa-sign-out-alt dropdown-item-icon"></i>
+              <span>Cerrar Sesión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔥 OVERLAY CON BLUR PARA DROPDOWNS 🔥 -->
+  <div 
+    class="dropdown-blur-overlay" 
+    *ngIf="activeDropdown() || showNotifications()"
+    (click)="closeAllDropdowns()"
+  ></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" *ngIf="showMobileMenu()" (click)="toggleMobileMenu()">
+    <div class="mobile-menu" (click)="$event.stopPropagation()">
+      <div class="mobile-menu-header">
+        <img src="../../../../assets/logo/logo-arcana.png" alt="Arcana" class="mobile-logo">
+        <button class="close-mobile-menu" (click)="toggleMobileMenu()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="mobile-menu-content">
+        <a class="mobile-menu-item" (click)="navigateToMobile('/dashboard')">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <a class="mobile-menu-item" (click)="navigateToMobile('/courses')">
+          <i class="fas fa-graduation-cap"></i>
+          <span>Cursos</span>
+        </a>
+        
+        <a class="mobile-menu-item" (click)="navigateToMobile('/consultations')">
+          <i class="fas fa-crystal-ball"></i>
+          <span>Consultas</span>
+        </a>
+        
+        <a class="mobile-menu-item" (click)="navigateToMobile('/tools')">
+          <i class="fas fa-magic"></i>
+          <span>Herramientas</span>
+        </a>
+        
+        <a class="mobile-menu-item" (click)="navigateToMobile('/profile')">
+          <i class="fas fa-user"></i>
+          <span>Mi Perfil</span>
+        </a>
+        
+        <a class="mobile-menu-item logout-mobile" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-button" (click)="toggleMobileMenu()" *ngIf="!showMobileMenu()">
+    <i class="fas fa-bars"></i>
+  </button>
+</header>

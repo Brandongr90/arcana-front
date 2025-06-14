@@ -1,0 +1,136 @@
+<app-header></app-header>
+
+<div class="dashboard-container">
+      <!-- Header de Bienvenida -->
+      <div class="welcome-header">
+        <div class="welcome-content">
+          <h1 class="welcome-title">
+            ¡Bienvenido de vuelta, {{ userName() }}! 🌙
+          </h1>
+          <p class="welcome-subtitle">
+            Tu viaje espiritual continúa. Explora las energías místicas que te esperan hoy.
+          </p>
+        </div>
+        <div class="current-moon-phase">
+          <div class="moon-icon">🌙</div>
+          <div class="moon-info">
+            <span class="moon-phase">Luna Creciente</span>
+            <span class="moon-energy">Energía de Crecimiento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadísticas Rápidas -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ stats().completedCourses }}/{{ stats().totalCourses }}</h3>
+            <p class="stat-label">Cursos Completados</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🔮</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ stats().upcomingAppointments }}</h3>
+            <p class="stat-label">Consultas Pendientes</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ stats().favoriteArticles }}</h3>
+            <p class="stat-label">Artículos Favoritos</p>
+          </div>
+        </div>
+        
+        <div class="stat-card daily-quote">
+          <div class="stat-icon">✨</div>
+          <div class="stat-content">
+            <p class="quote-text">"{{ dailyQuote() }}"</p>
+            <span class="quote-label">Mensaje del Día</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="section">
+        <h2 class="section-title">Acciones Rápidas</h2>
+        <div class="quick-actions-grid">
+          <div 
+            *ngFor="let action of quickActions()" 
+            class="quick-action-card"
+            [style.--card-color]="action.color"
+            (click)="navigateTo(action.route)"
+          >
+            <div class="action-icon">{{ action.icon }}</div>
+            <h3 class="action-title">{{ action.title }}</h3>
+            <p class="action-description">{{ action.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actividad Reciente -->
+      <div class="section">
+        <h2 class="section-title">Actividad Reciente</h2>
+        <div class="activity-list">
+          <div 
+            *ngFor="let activity of recentActivities()" 
+            class="activity-item"
+          >
+            <div class="activity-icon">{{ activity.icon }}</div>
+            <div class="activity-content">
+              <h4 class="activity-title">{{ activity.title }}</h4>
+              <p class="activity-description">{{ activity.description }}</p>
+              <span class="activity-date">{{ formatDate(activity.date) }}</span>
+            </div>
+          </div>
+          
+          <div *ngIf="recentActivities().length === 0" class="no-activity">
+            <div class="no-activity-icon">🌟</div>
+            <h3>¡Comienza tu viaje espiritual!</h3>
+            <p>Explora nuestros cursos, herramientas y consultas para comenzar.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Herramientas Rápidas -->
+      <div class="section">
+        <h2 class="section-title">Herramientas Místicas</h2>
+        <div class="tools-grid">
+          <div class="tool-card" (click)="navigateTo('/tools/tarot')">
+            <div class="tool-icon">🃏</div>
+            <h3>Lectura de Tarot</h3>
+            <p>Descubre lo que las cartas revelan</p>
+          </div>
+          
+          <div class="tool-card" (click)="navigateTo('/tools/runes')">
+            <div class="tool-icon">ᚱᚢᚾᚨ</div>
+            <h3>Runas Vikingas</h3>
+            <p>Sabiduría ancestral nórdica</p>
+          </div>
+          
+          <div class="tool-card" (click)="navigateTo('/tools/fortune-cookie')">
+            <div class="tool-icon">🥠</div>
+            <h3>Galleta de la Fortuna</h3>
+            <p>Un mensaje especial para ti</p>
+          </div>
+          
+          <div class="tool-card" (click)="navigateTo('/lunar-calendar')">
+            <div class="tool-icon">🌙</div>
+            <h3>Calendario Lunar</h3>
+            <p>Sincronízate con los ciclos lunares</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de Logout (temporal para demo) -->
+      <div class="demo-actions">
+        <button class="logout-btn" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>

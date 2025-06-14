@@ -952,3 +952,1036 @@ a:focus-visible {
   background: linear-gradient(90deg, transparent, #b4a2fd, transparent);
   border-radius: 1px;
 }
+
+// Icono principal del cristal
+.mystical-crystal-icon {
+  font-size: 80px;
+  
+  @media (min-width: 640px) {
+    font-size: 100px;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 120px;
+  }
+  
+  @media (min-width: 1280px) {
+    font-size: 140px;
+  }
+  
+  @media (min-width: 1536px) {
+    font-size: 280px;
+  }
+  
+  // Gradiente místico
+  background: linear-gradient(
+    135deg,
+    #e6e6fa 0%,
+    #b4a2fd 25%,
+    #9370db 50%,
+    #8a2be2 75%,
+    #6a5acd 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  // Efectos de sombra
+  filter: 
+    drop-shadow(0 0 20px rgba(180, 162, 253, 0.6))
+    drop-shadow(0 0 40px rgba(180, 162, 253, 0.3))
+    drop-shadow(0 5px 15px rgba(180, 162, 253, 0.4));
+  
+  // Animaciones
+  animation: crystal-float 6s ease-in-out infinite;
+  
+  // Transiciones
+  transition: all 0.4s ease;
+  cursor: pointer;
+  
+  // GPU optimization
+  will-change: transform, filter;
+  transform: translateZ(0);
+  
+  // Hover effects
+  &:hover {
+    transform: scale(1.05) rotateY(10deg) translateZ(0);
+    filter: 
+      drop-shadow(0 0 30px rgba(180, 162, 253, 0.8))
+      drop-shadow(0 0 60px rgba(180, 162, 253, 0.4))
+      drop-shadow(0 8px 25px rgba(180, 162, 253, 0.6));
+  }
+}
+
+// Glow interno del cristal
+.crystal-inner-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 60%;
+  height: 60%;
+  
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(180, 162, 253, 0.4) 30%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: mystical-pulse 3s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+// Glow externo del cristal
+.crystal-outer-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 140%;
+  height: 140%;
+  
+  background: radial-gradient(
+    circle,
+    rgba(180, 162, 253, 0.3) 0%,
+    rgba(180, 162, 253, 0.1) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: gentle-float 8s ease-in-out infinite;
+  z-index: -2;
+  pointer-events: none;
+}
+
+// Partículas místicas alrededor del cristal
+.mystical-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 6px rgba(180, 162, 253, 0.8),
+    0 0 12px rgba(180, 162, 253, 0.4);
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+  }
+  
+  &::before {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 8px;
+  }
+  
+  &::after {
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 1px;
+  }
+}
+
+.particle-1 {
+  top: 10%;
+  right: 20%;
+  animation: sparkle 4s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.particle-2 {
+  bottom: 15%;
+  left: 15%;
+  animation: sparkle 4s ease-in-out infinite;
+  animation-delay: 1.3s;
+  transform: scale(0.8);
+}
+
+.particle-3 {
+  top: 70%;
+  right: 10%;
+  animation: sparkle 4s ease-in-out infinite;
+  animation-delay: 2.6s;
+  transform: scale(1.2);
+}
+
+.particle-4 {
+  top: 30%;
+  left: 5%;
+  animation: sparkle 4s ease-in-out infinite;
+  animation-delay: 3.9s;
+  transform: scale(0.9);
+}
+
+// ========== ICONOS DE TEXTO (LUNA Y ESTRELLA) ==========
+
+.professional-moon {
+  color: #e6e6fa;
+  filter: 
+    drop-shadow(0 0 15px rgba(230, 230, 250, 0.6))
+    drop-shadow(0 0 30px rgba(180, 162, 253, 0.3));
+  animation: moon-pulse 6s ease-in-out infinite;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: #ffffff;
+    filter: 
+      drop-shadow(0 0 25px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 40px rgba(180, 162, 253, 0.5));
+    transform: scale(1.1);
+  }
+}
+
+.professional-star {
+  color: #ffd700;
+  filter: 
+    drop-shadow(0 0 15px rgba(255, 215, 0, 0.6))
+    drop-shadow(0 0 30px rgba(255, 215, 0, 0.3));
+  animation: star-twinkle 4s ease-in-out infinite;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: #ffed4e;
+    filter: 
+      drop-shadow(0 0 25px rgba(255, 237, 78, 0.8))
+      drop-shadow(0 0 40px rgba(255, 215, 0, 0.5));
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+.professional-sparkle {
+  color: #b4a2fd;
+  font-size: 1.5rem;
+  animation: floating-sparkle 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(180, 162, 253, 0.6));
+  
+  &:hover {
+    color: #ffffff;
+    transform: scale(1.2) rotate(15deg);
+  }
+}
+
+// ========== ANIMACIONES MEJORADAS ==========
+
+@keyframes moon-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+  }
+  75% {
+    opacity: 0.9;
+    transform: scale(1.05) rotate(-5deg);
+  }
+}
+
+@keyframes crystal-float {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg) translateZ(0);
+  }
+  25% {
+    transform: translateY(-15px) rotateX(2deg) rotateY(5deg) translateZ(0);
+  }
+  50% {
+    transform: translateY(-10px) rotateX(-1deg) rotateY(-3deg) translateZ(0);
+  }
+  75% {
+    transform: translateY(8px) rotateX(1deg) rotateY(2deg) translateZ(0);
+  }
+}
+
+// ========== ICONOS EN BOTONES ==========
+
+.primary-cta,
+.secondary-cta {
+  i {
+    transition: all 0.3s ease;
+  }
+  
+  &:hover i {
+    transform: scale(1.2);
+  }
+}
+
+.primary-cta i {
+  color: #100820;
+}
+
+.secondary-cta i {
+  color: #b4a2fd;
+}
+
+// ========== TRUST INDICATORS ==========
+
+.trust-indicators {
+  i {
+    color: #b4a2fd;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+}
+
+// ========== SVG ALTERNATIVO (si prefieres usar el orbe SVG) ==========
+
+.mystical-orb-svg {
+  width: 120px;
+  height: 100px;
+  
+  @media (min-width: 640px) {
+    width: 150px;
+    height: 150px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 200px;
+    height: 200px;
+  }
+  
+  @media (min-width: 1280px) {
+    width: 240px;
+    height: 240px;
+  }
+  
+  @media (min-width: 1536px) {
+    width: 280px;
+    height: 280px;
+  }
+  
+  filter: 
+    drop-shadow(0 0 20px rgba(180, 162, 253, 0.4))
+    drop-shadow(0 0 40px rgba(180, 162, 253, 0.2));
+  
+  animation: crystal-float 6s ease-in-out infinite;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    filter: 
+      drop-shadow(0 0 30px rgba(180, 162, 253, 0.6))
+      drop-shadow(0 0 60px rgba(180, 162, 253, 0.3));
+    transform: scale(1.05);
+  }
+}
+
+// ========== ACCESIBILIDAD Y PERFORMANCE ==========
+
+@media (prefers-reduced-motion: reduce) {
+  .mystical-crystal-icon,
+  .professional-moon,
+  .professional-star,
+  .professional-sparkle,
+  .crystal-inner-glow,
+  .crystal-outer-glow,
+  .particle,
+  .mystical-orb-svg {
+    animation: none !important;
+  }
+  
+  .mystical-crystal-icon,
+  .professional-moon,
+  .professional-star,
+  .professional-sparkle {
+    &:hover {
+      transform: none !important;
+    }
+  }
+}
+
+// GPU acceleration para todos los elementos animados
+.mystical-crystal-icon,
+.crystal-inner-glow,
+.crystal-outer-glow,
+.particle,
+.professional-moon,
+.professional-star,
+.professional-sparkle,
+.mystical-orb-svg {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+// Estados de focus para accesibilidad
+.mystical-crystal-icon:focus,
+.professional-moon:focus,
+.professional-star:focus {
+  outline: 3px solid rgba(180, 162, 253, 0.6);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+// ========== ESTILOS PARA ICONOS DE SERVICIOS ==========
+
+.service-tab {
+  position: relative;
+  transition: all 0.3s ease;
+  
+  // Iconos de servicios
+  .service-icon {
+    transition: all 0.3s ease;
+    color: inherit;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    
+    // Efectos específicos por servicio
+    &.fas.fa-eye {
+      // Tarot - Ojo místico
+      color: #9370db;
+    }
+    
+    &.fas.fa-star-and-crescent {
+      // Astrología - Estrella y luna
+      color: #ffd700;
+    }
+    
+    &.fas.fa-spa {
+      // Terapias holísticas
+      color: #20b2aa;
+    }
+    
+    &.fas.fa-moon {
+      // Ciclos lunares
+      color: #e6e6fa;
+    }
+  }
+  
+  // Estados del tab
+  &:hover {
+    background-color: rgba(180, 162, 253, 0.1) !important;
+    
+    .service-icon {
+      transform: scale(1.2) translateY(-2px);
+      filter: 
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))
+        drop-shadow(0 0 12px rgba(180, 162, 253, 0.4));
+    }
+  }
+  
+  &.active {
+    position: relative;
+    
+    .service-icon {
+      color: white !important;
+      transform: scale(1.1);
+      filter: 
+        drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3))
+        drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+    }
+    
+    // Indicador de tab activo
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    }
+    
+    // Efecto de glow en el tab activo
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.05) 100%
+      );
+      pointer-events: none;
+    }
+  }
+  
+  // Eliminar borde derecho en el último elemento
+  &.last {
+    @media (min-width: 1024px) {
+      border-right: none !important;
+    }
+  }
+}
+
+// ========== ICONOS GRANDES DE DISPLAY ==========
+
+.service-display-icon {
+  transition: all 0.4s ease;
+  opacity: 0.5;
+  
+  // Efectos específicos por servicio
+  &.fas.fa-eye {
+    animation: mystical-blink 4s ease-in-out infinite;
+  }
+  
+  &.fas.fa-star-and-crescent {
+    animation: celestial-rotate 8s linear infinite;
+  }
+  
+  &.fas.fa-spa {
+    animation: zen-pulse 6s ease-in-out infinite;
+  }
+  
+  &.fas.fa-moon {
+    animation: lunar-phase 10s ease-in-out infinite;
+  }
+  
+  &:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+// ========== ICONO PREMIUM CROWN ==========
+
+.premium-crown-icon {
+  animation: crown-glow 5s ease-in-out infinite;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    opacity: 0.8 !important;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+  }
+}
+
+// ========== ANIMACIONES ESPECÍFICAS ==========
+
+@keyframes mystical-blink {
+  0%, 90%, 100% {
+    opacity: 0.5;
+  }
+  5%, 85% {
+    opacity: 0.8;
+  }
+  10%, 80% {
+    opacity: 0.5;
+  }
+  15%, 75% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes celestial-rotate {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.5;
+  }
+  25% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.6;
+  }
+  75% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes zen-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+  75% {
+    opacity: 0.8;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes lunar-phase {
+  0%, 100% {
+    opacity: 0.3;
+    filter: brightness(0.8);
+  }
+  25% {
+    opacity: 0.6;
+    filter: brightness(1.0);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+  75% {
+    opacity: 0.5;
+    filter: brightness(0.9);
+  }
+}
+
+@keyframes crown-glow {
+  0%, 100% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.2));
+  }
+  50% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+  }
+}
+
+// ========== RESPONSIVE ADJUSTMENTS ==========
+
+@media (max-width: 768px) {
+  .service-tab {
+    padding: 1rem 0.5rem;
+    
+    .service-icon {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .service-display-icon {
+    font-size: 4rem !important;
+  }
+  
+  .premium-crown-icon {
+    font-size: 3rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-tab {
+    .service-icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+// ========== ACCESIBILIDAD ==========
+
+@media (prefers-reduced-motion: reduce) {
+  .service-display-icon {
+    animation: none !important;
+  }
+  
+  .premium-crown-icon {
+    animation: none !important;
+  }
+  
+  .service-icon {
+    &:hover {
+      transform: none !important;
+    }
+  }
+}
+
+// Focus states para accesibilidad
+.service-tab:focus {
+  outline: 2px solid rgba(180, 162, 253, 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+  
+  .service-icon {
+    transform: scale(1.1);
+  }
+}
+
+// ========== ESTADOS ESPECIALES ==========
+
+// Estado de carga
+.service-tab.loading {
+  .service-icon {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Estado deshabilitado
+.service-tab.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  
+  &:hover {
+    background-color: transparent !important;
+    
+    .service-icon {
+      transform: none !important;
+    }
+  }
+}
+
+// ========== TESTIMONIALES CON ICONOS ==========
+
+.testimonial-star {
+  color: #ffd700;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.4));
+  animation: star-shimmer 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+  }
+  
+  // Delay escalonado para las estrellas
+  &:nth-child(1) { animation-delay: 0s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+  &:nth-child(4) { animation-delay: 0.6s; }
+  &:nth-child(5) { animation-delay: 0.8s; }
+}
+
+@keyframes star-shimmer {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+// Contenedor de testimoniales
+.testimonials-container {
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  
+  // Efecto de brillo sutil
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(180, 162, 253, 0.1),
+      transparent,
+      rgba(180, 162, 253, 0.1),
+      transparent
+    );
+    border-radius: inherit;
+    z-index: -1;
+    animation: border-glow 4s ease-in-out infinite;
+  }
+}
+
+@keyframes border-glow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// ========== FINAL CTA SECTION ==========
+
+.final-moon-icon {
+  animation: mystical-pulse 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(180, 162, 253, 0.4));
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 30px rgba(180, 162, 253, 0.6));
+  }
+}
+
+.final-cta-button {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 15px rgba(180, 162, 253, 0.3);
+  transition: all 0.3s ease;
+  
+  i {
+    transition: all 0.3s ease;
+  }
+  
+  &:hover {
+    box-shadow: 0 6px 20px rgba(180, 162, 253, 0.4);
+    transform: translateY(-2px) scale(1.02);
+    
+    i {
+      transform: scale(1.2);
+    }
+  }
+}
+
+// ========== ICONOS EN OPCIONES ADICIONALES ==========
+
+.final-cta-section {
+  .grid > div {
+    transition: all 0.3s ease;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    
+    &:hover {
+      background-color: rgba(180, 162, 253, 0.05);
+      transform: translateY(-2px);
+    }
+    
+    p, button {
+      i {
+        transition: all 0.3s ease;
+        opacity: 0.7;
+      }
+      
+      &:hover i {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+    
+    // Iconos específicos con colores temáticos
+    .fa-eye, .fa-play-circle {
+      color: #9370db;
+    }
+    
+    .fa-question-circle, .fa-comments {
+      color: #20b2aa;
+    }
+    
+    .fa-balance-scale, .fa-list-ul {
+      color: #ffd700;
+    }
+  }
+}
+
+// ========== MEJORAS GENERALES ==========
+
+// Botones con iconos en general
+button {
+  &.flex.items-center.gap-2,
+  &.flex.items-center.gap-1 {
+    i {
+      transition: all 0.3s ease;
+    }
+    
+    &:hover i {
+      transform: translateX(2px);
+    }
+    
+    // Iconos específicos de dirección
+    .fa-arrow-right {
+      &:hover {
+        transform: translateX(4px);
+      }
+    }
+    
+    .fa-sign-in-alt {
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+    
+    .fa-rocket {
+      &:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+  }
+}
+
+// ========== RESPONSIVE ESPECÍFICO ==========
+
+@media (max-width: 768px) {
+  .testimonial-star {
+    margin-right: 0.125rem;
+    font-size: 1.25rem;
+  }
+  
+  .final-moon-icon {
+    font-size: 3rem !important;
+  }
+  
+  .final-cta-section .grid > div {
+    padding: 0.75rem;
+    
+    p, button {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials-container {
+    padding: 1.5rem;
+    margin: 0 0.5rem;
+  }
+  
+  .final-cta-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    
+    i {
+      font-size: 0.875rem;
+    }
+  }
+  
+  .final-cta-section .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+// ========== ACCESIBILIDAD MEJORADA ==========
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-star,
+  .final-moon-icon,
+  .testimonials-container::before {
+    animation: none !important;
+  }
+  
+  .final-cta-button:hover {
+    transform: none !important;
+  }
+  
+  .final-cta-section .grid > div:hover {
+    transform: none !important;
+  }
+}
+
+// Focus states mejorados
+.testimonial-dot:focus,
+.final-cta-button:focus {
+  outline: 2px solid rgba(180, 162, 253, 0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+// ========== ESTADOS ESPECIALES ==========
+
+// Loading state para testimoniales
+.testimonial-slide.loading {
+  .testimonial-star {
+    animation: pulse 1s ease-in-out infinite;
+  }
+}
+
+// Error state
+.testimonials-container.error {
+  border-color: rgba(220, 38, 127, 0.3);
+  background-color: rgba(220, 38, 127, 0.05);
+  
+  &::before {
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(220, 38, 127, 0.1),
+      transparent
+    );
+  }
+}
+
+// ========== EFECTOS ADICIONALES ==========
+
+// Partículas sutiles para el final CTA
+.final-cta-section {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b4a2fd, transparent);
+    opacity: 0.6;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 4px;
+    height: 4px;
+    background: #b4a2fd;
+    border-radius: 50%;
+    animation: gentle-float 6s ease-in-out infinite;
+    opacity: 0.3;
+  }
+}
+
+// Hover effect para toda la sección de testimoniales
+.testimonials-container:hover {
+  .testimonial-star {
+    animation-duration: 2s;
+  }
+}
+
+// Efecto de typing para testimoniales (opcional)
+.testimonial-text-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+  border-right: 2px solid rgba(180, 162, 253, 0.7);
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: rgba(180, 162, 253, 0.7); }
+}

@@ -63,60 +63,62 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private isBrowser: boolean;
 
   // Datos de los servicios
-  services = signal<Service[]>([
-    {
-      id: 'tarot',
-      name: 'Tarot y Arcanos',
-      icon: '🔮',
-      description: 'Lecturas personalizadas que revelan tu destino',
-      features: [
-        'Lecturas personalizadas diarias',
-        'Interpretación de arcanos mayores y menores',
-        'Spreads especializados para diferentes temas',
-        'Consultas en vivo con tarotistas certificados',
-        'Curso completo de lectura de tarot',
-      ],
-    },
-    {
-      id: 'astrology',
-      name: 'Astrología Avanzada',
-      icon: '✨',
-      description: 'Cartas astrales y predicciones cósmicas',
-      features: [
-        'Carta astral personalizada completa',
-        'Predicciones basadas en tránsitos planetarios',
-        'Compatibilidad astrológica',
-        'Análisis de retorno solar anual',
-        'Astrología predictiva y evolutiva',
-      ],
-    },
-    {
-      id: 'holistic',
-      name: 'Terapias Holísticas',
-      icon: '🧘‍♀️',
-      description: 'Chakras, frecuencias y sanación energética',
-      features: [
-        'Equilibrio y sanación de chakras',
-        'Terapias con frecuencias sonoras',
-        'Meditaciones guiadas especializadas',
-        'Trabajo con cristales y gemas',
-        'Técnicas de reiki y sanación energética',
-      ],
-    },
-    {
-      id: 'lunar',
-      name: 'Ciclos Lunares',
-      icon: '🌙',
-      description: 'Rituales y ceremonias según las fases lunares',
-      features: [
-        'Calendario lunar personalizado',
-        'Rituales para cada fase lunar',
-        'Ceremonias de luna llena y nueva',
-        'Manifestación lunar guiada',
-        'Conexión con ciclos naturales',
-      ],
-    },
-  ]);
+  // En tu welcome.component.ts - Actualizar la sección de services
+
+services = signal<Service[]>([
+  {
+    id: 'tarot',
+    name: 'Tarot y Arcanos',
+    icon: 'fas fa-eye', // Reemplaza 🔮
+    description: 'Lecturas personalizadas que revelan tu destino',
+    features: [
+      'Lecturas personalizadas diarias',
+      'Interpretación de arcanos mayores y menores',
+      'Spreads especializados para diferentes temas',
+      'Consultas en vivo con tarotistas certificados',
+      'Curso completo de lectura de tarot',
+    ],
+  },
+  {
+    id: 'astrology',
+    name: 'Astrología Avanzada',
+    icon: 'fas fa-star-and-crescent', // Reemplaza ✨
+    description: 'Cartas astrales y predicciones cósmicas',
+    features: [
+      'Carta astral personalizada completa',
+      'Predicciones basadas en tránsitos planetarios',
+      'Compatibilidad astrológica',
+      'Análisis de retorno solar anual',
+      'Astrología predictiva y evolutiva',
+    ],
+  },
+  {
+    id: 'holistic',
+    name: 'Terapias Holísticas',
+    icon: 'fas fa-spa', // Reemplaza 🧘‍♀️
+    description: 'Chakras, frecuencias y sanación energética',
+    features: [
+      'Equilibrio y sanación de chakras',
+      'Terapias con frecuencias sonoras',
+      'Meditaciones guiadas especializadas',
+      'Trabajo con cristales y gemas',
+      'Técnicas de reiki y sanación energética',
+    ],
+  },
+  {
+    id: 'lunar',
+    name: 'Ciclos Lunares',
+    icon: 'fas fa-moon', // Reemplaza 🌙
+    description: 'Rituales y ceremonias según las fases lunares',
+    features: [
+      'Calendario lunar personalizado',
+      'Rituales para cada fase lunar',
+      'Ceremonias de luna llena y nueva',
+      'Manifestación lunar guiada',
+      'Conexión con ciclos naturales',
+    ],
+  },
+]);
 
   // Testimoniales
   testimonials = signal<Testimonial[]>([
