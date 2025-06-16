@@ -330,6 +330,47 @@
   z-index: 1;
 }
 
+// ========== ESTILOS PARA LA IMAGEN DE LA ESFERA ==========
+
+.crystal-container img {
+  width: 120px;
+  height: 120px;
+  
+  @media (min-width: 640px) {
+    width: 150px;
+    height: 150px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 200px;
+    height: 200px;
+  }
+  
+  @media (min-width: 1280px) {
+    width: 240px;
+    height: 240px;
+  }
+  
+  @media (min-width: 1536px) {
+    width: 280px;
+    height: 280px;
+  }
+  
+  // GPU optimization
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+// Animación muy sutil y lenta
+@keyframes subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(180, 162, 253, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(180, 162, 253, 0.2);
+  }
+}
+
 .main-crystal {
   color: var(--star-color);
   filter: drop-shadow(0 0 20px rgba(180, 162, 253, 0.4));
@@ -991,26 +1032,14 @@ a:focus-visible {
     drop-shadow(0 0 20px rgba(180, 162, 253, 0.6))
     drop-shadow(0 0 40px rgba(180, 162, 253, 0.3))
     drop-shadow(0 5px 15px rgba(180, 162, 253, 0.4));
-  
-  // Animaciones
-  animation: crystal-float 6s ease-in-out infinite;
+
   
   // Transiciones
-  transition: all 0.4s ease;
   cursor: pointer;
   
   // GPU optimization
   will-change: transform, filter;
   transform: translateZ(0);
-  
-  // Hover effects
-  &:hover {
-    transform: scale(1.05) rotateY(10deg) translateZ(0);
-    filter: 
-      drop-shadow(0 0 30px rgba(180, 162, 253, 0.8))
-      drop-shadow(0 0 60px rgba(180, 162, 253, 0.4))
-      drop-shadow(0 8px 25px rgba(180, 162, 253, 0.6));
-  }
 }
 
 // Glow interno del cristal
