@@ -1,0 +1,116 @@
+.
+├── app
+│   ├── app.component.html
+│   ├── app.component.scss
+│   ├── app.component.ts
+│   ├── app.config.server.ts
+│   ├── app.config.ts
+│   ├── app.routes.server.ts
+│   ├── app.routes.ts
+│   ├── core
+│   │   ├── guards
+│   │   │   ├── auth.guard.ts
+│   │   │   └── subscription.guard.ts
+│   │   ├── models
+│   │   │   ├── api-response.interface.ts
+│   │   │   └── userInterface.ts
+│   │   └── services
+│   │       ├── api.service.ts
+│   │       ├── auth.service.ts
+│   │       └── storage.service.ts
+│   ├── features
+│   │   ├── auth
+│   │   │   ├── auth-routing.module.ts
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts
+│   │   │   └── pages
+│   │   │       ├── forgot-password
+│   │   │       │   ├── forgot-password.component.html
+│   │   │       │   ├── forgot-password.component.scss
+│   │   │       │   └── forgot-password.component.ts
+│   │   │       ├── login
+│   │   │       │   ├── login.component.html
+│   │   │       │   ├── login.component.scss
+│   │   │       │   └── login.component.ts
+│   │   │       └── register
+│   │   │           ├── register.component.html
+│   │   │           ├── register.component.scss
+│   │   │           └── register.component.ts
+│   │   ├── camino-magico
+│   │   │   ├── camino-magico.component.html
+│   │   │   ├── camino-magico.component.scss
+│   │   │   └── camino-magico.component.ts
+│   │   ├── cursos-talleres
+│   │   │   ├── cursos-talleres.component.html
+│   │   │   ├── cursos-talleres.component.scss
+│   │   │   └── cursos-talleres.component.ts
+│   │   ├── dashboard
+│   │   │   ├── dashboard.component.html
+│   │   │   ├── dashboard.component.scss
+│   │   │   ├── dashboard.component.ts
+│   │   │   └── dashboard.service.ts
+│   │   ├── en-vivo
+│   │   │   ├── en-vivo.component.html
+│   │   │   ├── en-vivo.component.scss
+│   │   │   └── en-vivo.component.ts
+│   │   ├── fases-lunares
+│   │   │   ├── fases-lunares.component.html
+│   │   │   ├── fases-lunares.component.scss
+│   │   │   └── fases-lunares.component.ts
+│   │   ├── holistico-espiritualidad
+│   │   │   ├── holistico-espiritualidad.component.html
+│   │   │   ├── holistico-espiritualidad.component.scss
+│   │   │   └── holistico-espiritualidad.component.ts
+│   │   ├── home
+│   │   │   ├── home-interfaces.ts
+│   │   │   ├── home.component.html
+│   │   │   ├── home.component.scss
+│   │   │   ├── home.component.ts
+│   │   │   └── modales
+│   │   ├── magia-esoterismo
+│   │   │   ├── magia-esoterismo.component.html
+│   │   │   ├── magia-esoterismo.component.scss
+│   │   │   └── magia-esoterismo.component.ts
+│   │   ├── tarot
+│   │   │   ├── tarot.component.html
+│   │   │   ├── tarot.component.scss
+│   │   │   └── tarot.component.ts
+│   │   ├── tienda
+│   │   │   ├── tienda.component.html
+│   │   │   ├── tienda.component.scss
+│   │   │   └── tienda.component.ts
+│   │   └── welcome
+│   │       ├── welcome
+│   │       │   ├── welcome.component.html
+│   │       │   ├── welcome.component.scss
+│   │       │   └── welcome.component.ts
+│   │       └── welcome-routing.module.ts
+│   └── shared
+│       ├── header
+│       │   ├── header.component.html
+│       │   ├── header.component.scss
+│       │   └── header.component.ts
+│       └── sidebar
+│           ├── sidebar-interfaces.ts
+│           ├── sidebar.component.html
+│           ├── sidebar.component.scss
+│           └── sidebar.component.ts
+├── assets
+│   ├── cristales
+│   │   └── cristal-morado.png
+│   ├── logo
+│   │   └── logo-arcana.png
+│   └── welcomeImages
+│       ├── aurora.png
+│       ├── ball.png
+│       ├── chakra.jpg
+│       ├── esfera.png
+│       ├── moon-cycles.png
+│       ├── moon.png
+│       └── stars.png
+├── database.sql
+├── index.html
+├── main.server.ts
+├── main.ts
+├── server.ts
+└── styles.scss

@@ -28,6 +28,7 @@ import {
   SignoZodiacal,
 } from '../../../../core/models/userInterface';
 import { Subject, takeUntil } from 'rxjs';
+import { DeviceDetectionService } from '../../../../core/services/device-detection.service';
 
 @Component({
   selector: 'app-register',
@@ -304,6 +305,7 @@ export class RegisterComponent {
     this.destroy$.complete();
     this.clearResendTimer();
   }
+
 
   // ============ 🆕 MÉTODOS PARA ICONOS PROFESIONALES ============
 
@@ -1085,18 +1087,20 @@ export class RegisterComponent {
   }
 
   clearVerificationCode(): void {
-  this.verificationCode.set(['', '', '', '', '', '']);
-  this.verificationError.set('');
-  this.filledDigitsCount.set(0); // 🆕 AGREGAR
+    this.verificationCode.set(['', '', '', '', '', '']);
+    this.verificationError.set('');
+    this.filledDigitsCount.set(0); // 🆕 AGREGAR
 
-  // Limpiar TODOS los inputs del DOM
-  for (let i = 0; i < 6; i++) {
-    const input = document.querySelector(`input[data-index="${i}"]`) as HTMLInputElement;
-    if (input) {
-      input.value = '';
+    // Limpiar TODOS los inputs del DOM
+    for (let i = 0; i < 6; i++) {
+      const input = document.querySelector(
+        `input[data-index="${i}"]`
+      ) as HTMLInputElement;
+      if (input) {
+        input.value = '';
+      }
     }
   }
-}
 
   async onVerifyCode(): Promise<void> {
     if (!this.isCodeComplete() || this.isVerifying()) return;

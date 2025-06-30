@@ -1,0 +1,250 @@
+<!-- Contenedor Principal de Navegación Móvil -->
+<div class="mobile-nav-container">
+  <!-- Overlay de Fondo para Modales -->
+  <div
+    *ngIf="isMenuModalOpen || isUserModalOpen"
+    class="modal-overlay"
+    (click)="closeAllModals()"
+  ></div>
+
+  <!-- Modal del Menú Principal -->
+  <div
+    *ngIf="isMenuModalOpen"
+    class="menu-modal"
+    appClickOutside
+    (clickOutside)="onMenuModalClickOutside()"
+  >
+    <!-- Header del Modal con Botón Cerrar -->
+    <div class="menu-header">
+      <button
+        class="close-btn"
+        (click)="closeAllModals()"
+        aria-label="Cerrar menú"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del Menú -->
+    <div class="menu-content">
+      <!-- Logo de la Aplicación -->
+      <div
+        class="logo-container"
+        [ngClass]="{ 'logo-active': isHomeActive }"
+        (click)="onLogoClick()"
+      >
+        <img
+          alt="Arcana logo"
+          class="w-8 h-8 logo-image"
+          [ngClass]="{ 'logo-image-active': isHomeActive }"
+          height="32"
+          [src]="logoUrl"
+          width="32"
+          (error)="onLogoError($event)"
+        />
+        <span
+          class="font-semibold text-lg logo-text"
+          [ngClass]="{ 'logo-text-active': isHomeActive }"
+        >
+          {{ appName }}
+        </span>
+      </div>
+
+      <!-- Navegación Principal -->
+      <nav class="flex flex-col gap-4 text-sm font-medium menu-sections">
+        <!-- Secciones del Menú -->
+        <div
+          *ngFor="let section of menuSections; trackBy: trackBySection"
+          class="menu-section"
+        >
+          <!-- Título de la Sección -->
+          <h3 class="text-xs font-semibold text-gray-400 mb-2 section-title">
+            {{ section.title }}
+          </h3>
+
+          <!-- Items de la Sección -->
+          <div class="flex flex-col gap-1">
+            <a
+              *ngFor="let item of section.items; trackBy: trackByItem"
+              [routerLink]="item.route || '/'"
+              class="menu-item"
+              [ngClass]="{ active: item.isActive }"
+              (click)="onMenuItemClick(item)"
+            >
+              <!-- Icono del Item -->
+              <i [class]="item.icon"></i>
+
+              <!-- Texto del Item -->
+              <span class="menu-text">{{ item.label }}</span>
+
+              <!-- Badge (si existe) -->
+              <span *ngIf="item.badge" class="ml-auto badge mystical-badge">
+                {{ item.badge }}
+              </span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Modal del Usuario -->
+  <div
+    *ngIf="isUserModalOpen"
+    class="user-modal"
+    appClickOutside
+    (clickOutside)="onUserModalClickOutside()"
+  >
+    <!-- Header del Modal de Usuario -->
+    <div class="user-modal-header">
+      <button
+        class="close-btn"
+        (click)="closeAllModals()"
+        aria-label="Cerrar menú de usuario"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del Modal de Usuario -->
+    <div class="user-modal-content">
+      <!-- Efectos de Fondo del Modal -->
+      <div class="dropdown-bg-effects">
+        <div class="dropdown-particle dp-1"></div>
+        <div class="dropdown-particle dp-2"></div>
+        <div class="dropdown-particle dp-3"></div>
+      </div>
+
+      <!-- Información del Usuario -->
+      <div class="dropdown-user-section">
+        <div class="dropdown-avatar-small">
+          <div class="dropdown-avatar-glow"></div>
+        </div>
+        <div class="dropdown-user-info">
+          <span class="dropdown-user-name">{{ userProfile.name }}</span>
+          <span class="dropdown-user-email">{{ userProfile.email }}</span>
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <div class="dropdown-divider">
+        <div class="divider-line"></div>
+        <div class="divider-sparkle">
+          <i class="fas fa-sparkles"></i>
+        </div>
+      </div>
+
+      <!-- Opciones del Menú de Usuario -->
+      <div class="dropdown-menu-options">
+        <button class="dropdown-option" (click)="onEditProfile()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-user-edit option-icon"></i>
+            <div class="option-icon-glow"></div>
+          </div>
+          <span class="option-text">Editar Perfil</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+
+        <button class="dropdown-option" (click)="onChangePassword()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-key option-icon"></i>
+            <div class="option-icon-glow"></div>
+          </div>
+          <span class="option-text">Cambiar Contraseña</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+
+        <button class="dropdown-option" (click)="onSettings()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-cog option-icon"></i>
+            <div class="option-icon-glow"></div>
+          </div>
+          <span class="option-text">Configuración</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+
+        <button class="dropdown-option" (click)="onSubscription()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-crown option-icon"></i>
+            <div class="option-icon-glow"></div>
+          </div>
+          <span class="option-text">Mi Suscripción</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+
+        <button class="dropdown-option" (click)="onHelp()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-question-circle option-icon"></i>
+            <div class="option-icon-glow"></div>
+          </div>
+          <span class="option-text">Ayuda y Soporte</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+
+        <!-- Separador antes del Logout -->
+        <div class="dropdown-divider-simple">
+          <div class="divider-line-simple"></div>
+        </div>
+
+        <!-- Opción de Cerrar Sesión -->
+        <button class="dropdown-option logout-option" (click)="onLogout()">
+          <div class="option-icon-wrapper">
+            <i class="fas fa-sign-out-alt option-icon"></i>
+            <div class="option-icon-glow logout-glow"></div>
+          </div>
+          <span class="option-text">Cerrar Sesión</span>
+          <i class="fas fa-chevron-right option-arrow"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Navegación Inferior -->
+  <nav class="bottom-nav">
+    <!-- Botón de Menú -->
+    <button
+      class="nav-btn text-gray-400"
+      [ngClass]="{ active: isMenuModalOpen }"
+      (click)="onMenuClick()"
+      (touchstart)="onMenuTouch($event)"
+      [style.z-index]="'99999'"
+      [style.position]="'relative'"
+      aria-label="Abrir menú"
+    >
+      <div class="nav-icon-wrapper">
+        <i class="fas fa-bars nav-icon"></i>
+        <div class="nav-icon-glow menu-glow"></div>
+      </div>
+      <span class="nav-label">Menú</span>
+    </button>
+
+    <!-- Botón de Inicio -->
+    <button
+      class="nav-btn nav-btn-home"
+      [ngClass]="{ active: isHomeActive }"
+      (click)="onHomeClick()"
+      aria-label="Ir a inicio"
+    >
+      <div class="nav-icon-wrapper">
+        <i class="fas fa-home nav-icon"></i>
+        <div class="nav-icon-glow home-glow"></div>
+      </div>
+      <span class="nav-label">Inicio</span>
+    </button>
+
+    <!-- Botón de Usuario -->
+    <button
+      class="nav-btn"
+      [ngClass]="{ active: isUserModalOpen }"
+      (click)="onUserClick()"
+      (touchstart)="onUserTouch($event)"
+      aria-label="Menú de usuario"
+    >
+      <div class="nav-icon-wrapper">
+        <i class="fas fa-user nav-icon"></i>
+        <div class="nav-icon-glow user-glow"></div>
+      </div>
+      <span class="nav-label">Usuario</span>
+    </button>
+  </nav>
+</div>

@@ -197,6 +197,30 @@
   overflow: hidden;
 }
 
+.absolute.top-6.left-6.z-20 {
+  position: fixed !important;
+  top: 1.5rem !important;
+  left: 1.5rem !important;
+  z-index: 9999 !important;
+}
+
+@media (max-width: 768px) {
+  .forgot-password-link {
+    text-align: center !important;
+    width: 100% !important;
+    display: block !important;
+    margin-top: 0.75rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .absolute.top-6.left-6.z-20 {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+  }
+}
+
 .login-container::before {
   content: "";
   position: absolute;

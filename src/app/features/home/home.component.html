@@ -1,0 +1,700 @@
+<!-- Contenedor principal del Home -->
+<div class="home-container">
+  
+  <!-- Header del Home con Filtros -->
+  <div class="home-header">
+    <h1>Bienvenido a tu Feed</h1>
+    <p>¿Qué deseas ver hoy?</p>
+    
+    <!-- Sistema de Filtros -->
+    <div class="filter-container">
+      <button 
+        *ngFor="let filter of filterOptions" 
+        class="filter-btn"
+        [class.active]="activeFilter() === filter.value"
+        (click)="setActiveFilter(filter.value)">
+        <i [class]="filter.icon"></i>
+        <span>{{ filter.label }}</span>
+        <div class="filter-indicator"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid principal de contenido -->
+  <div class="content-grid">
+    
+    <!-- Columna izquierda: Contenido principal -->
+    <div class="main-content">
+      
+      <!-- Contenedor de Posts (Solo cuando el filtro es 'posts') -->
+      <div *ngIf="activeFilter() === 'posts'" class="content-container posts-container">
+        <!-- Header del contenedor -->
+        <div class="posts-header">
+          <h3><i class="hgi-stroke hgi-sparkles"></i> Posts</h3>
+          <button class="new-post-btn" (click)="onCreateNewPost()">
+            <i class="fas fa-plus"></i>
+            <span>Crear Post</span>
+          </button>
+        </div>
+
+        <!-- Lista de Posts -->
+        <div class="posts-list">
+          <article 
+            *ngFor="let post of posts(); trackBy: trackByPostId" 
+            class="post-card">
+            
+            <div class="post-header">
+              <div class="author-info">
+                <div class="avatar-container">
+                  <img [src]="post.author.avatar" 
+                       [alt]="post.author.name" 
+                       class="avatar">
+                  <div *ngIf="post.author.isOnline" class="online-indicator"></div>
+                </div>
+                <div class="author-details">
+                  <h4 class="author-name">{{ post.author.name }}</h4>
+                  <p class="post-time">
+                    {{ getRelativeTime(post.createdAt) }} • 
+                    <span class="zodiac-sign">{{ post.author.zodiacSign }}</span>
+                  </p>
+                </div>
+              </div>
+              <button class="post-menu-btn">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+
+            <div class="post-content">
+              <p>{{ post.content }}</p>
+              
+              <div *ngIf="post.image" class="post-image-container">
+                <img [src]="post.image" 
+                     [alt]="'Imagen de ' + post.author.name" 
+                     class="post-image">
+              </div>
+              
+              <div *ngIf="post.tags && post.tags.length > 0" class="post-tags">
+                <span *ngFor="let tag of post.tags" class="tag">{{ tag }}</span>
+              </div>
+            </div>
+
+            <div class="post-actions">
+              <button 
+                class="action-btn like-btn"
+                [class.active]="post.isLiked"
+                (click)="onPostLike(post.id)">
+                <i [class]="post.isLiked ? 'fas fa-heart' : 'far fa-heart'"></i>
+                <span>{{ post.likes }}</span>
+              </button>
+              
+              <button 
+                class="action-btn comment-btn"
+                [class.active]="post.showComments"
+                (click)="onPostComment(post.id)">
+                <i class="far fa-comment"></i>
+                <span>{{ getTotalCommentsCount(post) }}</span>
+              </button>
+              
+              <button 
+                class="action-btn share-btn"
+                (click)="onPostShare(post.id)">
+                <i class="far fa-share-square"></i>
+              </button>
+            </div>
+
+            <!-- Sección de Comentarios -->
+            <div *ngIf="post.showComments" class="comments-section">
+              
+              <!-- Lista de Comentarios -->
+              <div class="comments-list" *ngIf="post.postComments.length > 0">
+                
+                <!-- Comentario Individual -->
+                <div 
+                  *ngFor="let comment of getVisibleComments(post); trackBy: trackByCommentId"
+                  class="comment-item">
+                  
+                  <!-- Header del Comentario -->
+                  <div class="comment-header">
+                    <div class="comment-author-info">
+                      <div class="comment-avatar-container">
+                        <img [src]="comment.author.avatar" 
+                             [alt]="comment.author.name" 
+                             class="comment-avatar">
+                        <div *ngIf="comment.author.isOnline" class="comment-online-indicator"></div>
+                      </div>
+                      
+                        <!-- Contenido del Comentario -->
+                        <div class="comment-content-wrapper">
+                          <div class="comment-bubble">
+                            <div class="comment-author-details">
+                              <h5 class="comment-author-name">{{ comment.author.name }}</h5>
+                              <span class="comment-zodiac">{{ comment.author.zodiacSign }}</span>
+                            </div>
+                            <p class="comment-text">{{ comment.content }}</p>
+                          </div>
+                        
+                        <!-- Metadata del Comentario -->
+                        <div class="comment-metadata">
+                          <span class="comment-time">{{ getRelativeTime(comment.createdAt) }}</span>
+                          
+                          <button 
+                            class="comment-like-btn"
+                            [class.active]="comment.isLiked"
+                            (click)="onCommentLike(post.id, comment.id)">
+                            <i [class]="comment.isLiked ? 'fas fa-heart' : 'far fa-heart'"></i>
+                            <span *ngIf="comment.likes > 0">{{ comment.likes }}</span>
+                          </button>
+                          
+                          <button 
+                            class="comment-reply-btn"
+                            (click)="onReplyToComment(post.id, comment.id)">
+                            Responder
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Respuestas al Comentario -->
+                  <div class="comment-replies" *ngIf="comment.replies.length > 0">
+                    
+                    <!-- Respuesta Individual -->
+                    <div 
+                      *ngFor="let reply of getVisibleReplies(comment); trackBy: trackByReplyId"
+                      class="reply-item">
+                      
+                      <div class="reply-connector"></div>
+                      
+                      <div class="reply-content">
+                        <div class="reply-author-info">
+                          <div class="reply-avatar-container">
+                            <img [src]="reply.author.avatar" 
+                                 [alt]="reply.author.name" 
+                                 class="reply-avatar">
+                          </div>
+                          
+                            <div class="reply-content-wrapper">
+                              <div class="reply-bubble">
+                                <div class="reply-author-details">
+                                  <h6 class="reply-author-name">{{ reply.author.name }}</h6>
+                                  <span class="reply-zodiac">{{ reply.author.zodiacSign }}</span>
+                                </div>
+                                <p class="reply-text">{{ reply.content }}</p>
+                              </div>
+                            
+                            <!-- Metadata de la Respuesta -->
+                            <div class="reply-metadata">
+                              <span class="reply-time">{{ getRelativeTime(reply.createdAt) }}</span>
+                              
+                              <button 
+                                class="reply-like-btn"
+                                [class.active]="reply.isLiked"
+                                (click)="onReplyLike(post.id, comment.id, reply.id)">
+                                <i [class]="reply.isLiked ? 'fas fa-heart' : 'far fa-heart'"></i>
+                                <span *ngIf="reply.likes > 0">{{ reply.likes }}</span>
+                              </button>
+                              
+                              <button 
+                                class="reply-reply-btn"
+                                (click)="onReplyToComment(post.id, comment.id)">
+                                Responder
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Botón Ver Más Respuestas -->
+                    <div class="show-more-replies" *ngIf="hasMoreReplies(comment)">
+                      <button 
+                        class="show-more-replies-btn"
+                        (click)="onShowMoreReplies(post.id, comment.id)">
+                        <div class="replies-connector-line"></div>
+                        <div class="show-more-replies-content">
+                          <i class="fas fa-chevron-down"></i>
+                          <span>Ver {{ getRemainingRepliesCount(comment) }} respuesta{{ getRemainingRepliesCount(comment) > 1 ? 's' : '' }} más</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botón Ver Más Comentarios -->
+                <div class="show-more-comments" *ngIf="hasMoreComments(post)">
+                  <button 
+                    class="show-more-comments-btn"
+                    (click)="onShowMoreComments(post.id)">
+                    <i class="fas fa-chevron-down"></i>
+                    <span>Ver {{ getRemainingCommentsCount(post) }} comentario{{ getRemainingCommentsCount(post) > 1 ? 's' : '' }} más</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Estado vacío de comentarios -->
+              <div class="comments-empty" *ngIf="post.postComments.length === 0">
+                <i class="far fa-comment-dots"></i>
+                <p>Sé el primero en comentar</p>
+                <span>Comparte tu sabiduría mística</span>
+              </div>
+
+              <!-- Input para nuevo comentario -->
+              <div class="comment-input-section">
+                <div class="comment-input-container">
+                  <div class="current-user-avatar">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop&crop=face" 
+                         alt="Tu avatar" 
+                         class="input-avatar">
+                  </div>
+                  <div class="comment-input-wrapper">
+                    <textarea 
+                      placeholder="Comparte tu intuición..."
+                      class="comment-input"
+                      rows="2"></textarea>
+                    <button class="comment-submit-btn">
+                      <i class="fas fa-paper-plane"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+          <button 
+            class="load-more-btn" 
+            [disabled]="isLoading()"
+            (click)="onLoadMorePosts()">
+            <i [class]="isLoading() ? 'fas fa-spinner fa-spin' : 'fas fa-chevron-down'"></i>
+            <span>{{ isLoading() ? 'Cargando...' : 'Ver más posts' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Artículos (Solo cuando el filtro es 'articles') -->
+      <div *ngIf="activeFilter() === 'articles'" class="content-container articles-container">
+        <div class="articles-header">
+          <h3><i class="fas fa-scroll">&nbsp;</i>Artículos</h3>
+          <p>Sabiduría ancestral y conocimiento esotérico</p>
+        </div>
+
+        <!-- Lista de Artículos -->
+        <div class="articles-list">
+          <article 
+            *ngFor="let articulo of articulos(); trackBy: trackByArticuloId"
+            class="article-card"
+            (click)="onArticuloView(articulo.id)">
+            
+            <!-- Imagen destacada del artículo -->
+            <div class="article-image-container">
+              <img 
+                [src]="articulo.imagen_destacada" 
+                [alt]="articulo.titulo"
+                class="article-image">
+              <div class="article-overlay">
+                <span class="discipline-badge" [style.background-color]="getDisciplinaInfo(articulo.disciplina_id).color_hex">
+                  {{ getDisciplinaInfo(articulo.disciplina_id).nombre }}
+                </span>
+                <span class="article-status" [class]="'status-' + articulo.estado">
+                  {{ articulo.estado }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Contenido del artículo -->
+            <div class="article-content">
+              <!-- Header con info de la bruja -->
+              <div class="article-author">
+                <div class="author-avatar-container">
+                  <img 
+                    [src]="getBrujaInfo(articulo.bruja_id).avatar_url"
+                    [alt]="getBrujaInfo(articulo.bruja_id).nombre + ' ' + getBrujaInfo(articulo.bruja_id).apellido"
+                    class="author-avatar">
+                </div>
+                <div class="author-info">
+                  <h4 class="author-name">
+                    {{ getBrujaInfo(articulo.bruja_id).nombre }} {{ getBrujaInfo(articulo.bruja_id).apellido }}
+                  </h4>
+                  <div class="author-details">
+                    <span class="author-rating">
+                      <i class="fas fa-star"></i>
+                      {{ getBrujaInfo(articulo.bruja_id).calificacion_promedio }}
+                    </span>
+                    <span class="author-specialties">
+                      {{ getBrujaInfo(articulo.bruja_id).especialidades.join(', ') }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Título y resumen -->
+              <div class="article-text">
+                <h3 class="article-titulo">{{ articulo.titulo }}</h3>
+                <p class="article-resumen">{{ articulo.resumen }}</p>
+              </div>
+
+              <!-- Metadata del artículo -->
+              <div class="article-metadata">
+                <div class="metadata-row">
+                  <span class="publish-date">
+                    <i class="far fa-calendar"></i>
+                    {{ getFormattedDate(articulo.fecha_publicacion) }}
+                  </span>
+                  <span class="reading-time">
+                    <i class="far fa-clock"></i>
+                    {{ getEstimatedReadingTime(articulo.contenido ) }} min
+                  </span>
+                </div>
+              </div>
+
+              <!-- Acciones del artículo -->
+              <div class="article-actions">
+                <button 
+                  class="action-btn like-btn"
+                  (click)="onArticuloLike(articulo.id); $event.stopPropagation()">
+                  <i class="far fa-heart"></i>
+                  <span>{{ articulo.me_gusta }}</span>
+                </button>
+                
+                <span class="action-stat views-stat">
+                  <i class="far fa-eye"></i>
+                  <span>{{ articulo.visualizaciones }}</span>
+                </span>
+                
+                <button 
+                  class="action-btn share-btn"
+                  (click)="onArticuloShare(articulo.slug); $event.stopPropagation()">
+                  <i class="far fa-share-square"></i>
+                </button>
+                
+                <button class="read-more-btn">
+                  <span>Leer más</span>
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Load More Button para artículos -->
+        <div class="load-more-container">
+          <button 
+            class="load-more-btn" 
+            [disabled]="isLoading()"
+            (click)="onLoadMoreArticulos()">
+            <i [class]="isLoading() ? 'fas fa-spinner fa-spin' : 'fas fa-chevron-down'"></i>
+            <span>{{ isLoading() ? 'Cargando...' : 'Ver más artículos' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Eventos (Solo cuando el filtro es 'events') -->
+      <div *ngIf="activeFilter() === 'events'" class="content-container events-container">
+        <div class="events-header">
+          <h3><i class="fas fa-calendar-alt">&nbsp;</i> Eventos</h3>
+          <p>Rituales, ceremonias y encuentros espirituales</p>
+        </div>
+
+        <!-- Lista de Eventos -->
+        <div class="events-list">
+          <article 
+            *ngFor="let evento of eventos(); trackBy: trackByEventoId"
+            class="event-card">
+            
+            <!-- Imagen del evento -->
+            <div class="event-image-container">
+              <img 
+                [src]="evento.imagen_evento" 
+                [alt]="evento.titulo"
+                class="event-image">
+              <div class="event-overlay">
+                <span class="event-type-badge" [class]="'type-' + evento.tipo_evento">
+                  <i [class]="getEventTypeIcon(evento.tipo_evento)"></i>
+                  {{ evento.tipo_evento }}
+                </span>
+                <span class="event-price-badge" *ngIf="evento.precio > 0">
+                  ${{ evento.precio }}
+                </span>
+                <span class="event-price-badge free" *ngIf="evento.precio === 0">
+                  Gratis
+                </span>
+              </div>
+            </div>
+
+            <!-- Contenido del evento -->
+            <div class="event-content">
+              <!-- Header con fecha y organizador -->
+              <div class="event-header">
+                <div class="event-date-info">
+                  <div class="date-primary">
+                    <i class="fas fa-calendar-alt" style="color: beige;"></i>
+                    {{ getFormattedEventDate(evento.fecha_inicio) }}
+                  </div>
+                  <div class="time-duration">
+                    <span class="event-time">
+                      <i class="far fa-clock" style="color: beige;"></i>
+                      {{ getFormattedEventTime(evento.fecha_inicio) }} - {{ getFormattedEventTime(evento.fecha_fin) }}
+                    </span>
+                    <span class="event-duration" style="color: bisque;">
+                      ({{ getEventDuration(evento.fecha_inicio, evento.fecha_fin) }})
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="organizer-info">
+                  <div class="organizer-avatar-container">
+                    <img 
+                      [src]="getOrganizadorInfo(evento.organizador_id).avatar_url"
+                      [alt]="getOrganizadorInfo(evento.organizador_id).nombre + ' ' + getOrganizadorInfo(evento.organizador_id).apellido"
+                      class="organizer-avatar">
+                  </div>
+                  <div class="organizer-details">
+                    <h4 class="organizer-name">
+                      {{ getOrganizadorInfo(evento.organizador_id).nombre }} {{ getOrganizadorInfo(evento.organizador_id).apellido }}
+                    </h4>
+                    <span class="organizer-role">Organizador</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Título y descripción -->
+              <div class="event-text">
+                <h3 class="event-titulo">{{ evento.titulo }}</h3>
+                <p class="event-descripcion">{{ evento.descripcion }}</p>
+              </div>
+
+              <!-- Información adicional -->
+              <div class="event-details">
+                <div class="detail-item" *ngIf="evento.ubicacion">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>{{ evento.ubicacion }}</span>
+                </div>
+                
+                <div class="detail-item" *ngIf="!evento.ubicacion && evento.url_evento">
+                  <i class="fas fa-globe"></i>
+                  <span>Evento Virtual</span>
+                </div>
+                
+                <div class="detail-item" *ngIf="evento.cupo_maximo">
+                  <i class="fas fa-users"></i>
+                  <span>Cupo máximo: {{ evento.cupo_maximo }} personas</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="discipline-tag" [style.background-color]="getDisciplinaInfo(evento.disciplina_id).color_hex">
+                    {{ getDisciplinaInfo(evento.disciplina_id).nombre }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Acciones del evento -->
+              <div class="event-actions">
+                <button 
+                  class="action-btn primary-btn"
+                  (click)="onEventoInscripcion(evento.id)">
+                  <i class="fas fa-ticket-alt"></i>
+                  <span>{{ evento.precio > 0 ? 'Inscribirse' : 'Inscripción Gratuita' }}</span>
+                </button>
+                
+                <button 
+                  class="action-btn secondary-btn"
+                  *ngIf="evento.url_evento">
+                  <i class="fas fa-external-link-alt"></i>
+                  <span>Más info</span>
+                </button>
+                
+                <button 
+                  class="action-btn icon-btn"
+                  title="Compartir evento">
+                  <i class="far fa-share-square"></i>
+                </button>
+                
+                <button 
+                  class="action-btn icon-btn"
+                  title="Añadir a favoritos">
+                  <i class="far fa-heart"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Load More Button para eventos -->
+        <div class="load-more-container">
+          <button 
+            class="load-more-btn" 
+            [disabled]="isLoading()"
+            (click)="onLoadMoreEventos()">
+            <i [class]="isLoading() ? 'fas fa-spinner fa-spin' : 'fas fa-chevron-down'"></i>
+            <span>{{ isLoading() ? 'Cargando...' : 'Ver más eventos' }}</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna derecha: Sidebar (Solo visible en desktop/tablet) -->
+    <div class="sidebar-content">
+      
+      <!-- Contenedor de Historial de Citas -->
+      <div class="content-container appointments-container">
+        <div class="container-header">
+          <h3><i class="fas fa-calendar-check">&nbsp;&nbsp;</i>Historial de Citas</h3>
+          <p>Tus consultas con brujas</p>
+        </div>
+
+        <!-- Lista de Citas -->
+        <div class="appointments-list" *ngIf="citas().length > 0; else emptyCitas">
+          <div 
+            *ngFor="let cita of citas(); trackBy: trackByCitaId"
+            class="appointment-card">
+            
+            <!-- Header de la cita -->
+            <div class="appointment-header">
+              <div class="bruja-info">
+                <img 
+                  [src]="getBrujaInfo(cita.bruja_id).avatar_url"
+                  [alt]="getBrujaInfo(cita.bruja_id).nombre"
+                  class="bruja-avatar">
+                <div class="bruja-details">
+                  <h4 class="bruja-name">{{ getBrujaInfo(cita.bruja_id).nombre }} {{ getBrujaInfo(cita.bruja_id).apellido }}</h4>
+                  <span class="appointment-price">${{ cita.precio_acordado }}</span>
+                </div>
+              </div>
+              <span class="appointment-status" [class]="getEstadoClass(cita.estado)">
+                {{ cita.estado }}
+              </span>
+            </div>
+
+            <!-- Información de la cita -->
+            <div class="appointment-info">
+              <div class="date-time">
+                <span class="appointment-date">
+                  <i class="far fa-calendar" style="color: bisque;"></i>
+                  {{ getFormattedCitaDate(cita.fecha_hora_inicio) }}
+                </span>
+                <span class="appointment-time">
+                  <i class="far fa-clock" ></i>
+                  {{ getFormattedCitaTime(cita.fecha_hora_inicio) }}
+                </span>
+              </div>
+              
+              <div class="method-rating">
+                <span class="appointment-method">
+                  <i [class]="getMetodoIcon(cita.metodo)" style="color: beige;"></i>
+                  {{ cita.metodo }}
+                </span>
+                
+                <div class="rating" *ngIf="cita.calificacion_bruja">
+                  <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]" 
+                     [class.active]="star <= cita.calificacion_bruja!"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <ng-template #emptyCitas>
+          <div class="empty-state">
+            <i class="fas fa-calendar-times"></i>
+            <p>No tienes citas registradas</p>
+            <span class="empty-subtitle">Agenda tu primera consulta</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Contenedor de Historial de Cursos -->
+      <div class="content-container courses-container">
+        <div class="container-header">
+          <h3><i class="fas fa-graduation-cap"></i> Historial de Cursos</h3>
+          <p>Tu progreso de aprendizaje</p>
+        </div>
+
+        <!-- Lista de Cursos -->
+        <div class="courses-list" *ngIf="cursosConProgreso().length > 0; else emptyCourses">
+          <div 
+            *ngFor="let cursoProgreso of cursosConProgreso(); trackBy: trackByCursoId"
+            class="course-card">
+            
+            <!-- Imagen del curso -->
+            <div class="course-image-container">
+              <img 
+                [src]="cursoProgreso.curso.imagen_portada"
+                [alt]="cursoProgreso.curso.titulo"
+                class="course-image">
+              <div class="course-overlay">
+                <span class="course-level" [class]="getNivelClass(cursoProgreso.curso.nivel)">
+                  {{ cursoProgreso.curso.nivel }}
+                </span>
+                <span class="course-type">
+                  <i [class]="getTipoContenidoIcon(cursoProgreso.curso.tipo_contenido)"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Contenido del curso -->
+            <div class="course-content">
+              <!-- Título y disciplina -->
+              <div class="course-header">
+                <h4 class="course-title">{{ cursoProgreso.curso.titulo }}</h4>
+                <span class="course-discipline" [style.background-color]="getDisciplinaInfo(cursoProgreso.curso.disciplina_id).color_hex">
+                  {{ getDisciplinaInfo(cursoProgreso.curso.disciplina_id).nombre }}
+                </span>
+              </div>
+
+              <!-- Progreso -->
+              <div class="course-progress">
+                <div class="progress-info">
+                  <span class="progress-percentage">{{ cursoProgreso.progreso.porcentaje_completado }}%</span>
+                  <span class="progress-status" [class]="getProgresoClass(cursoProgreso.progreso.estado)">
+                    {{ cursoProgreso.progreso.estado === 'en_progreso' ? 'En curso' : 
+                        cursoProgreso.progreso.estado === 'completada' ? 'Completado' : 'Pendiente' }}
+                  </span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="cursoProgreso.progreso.porcentaje_completado"></div>
+                </div>
+              </div>
+
+              <!-- Información adicional -->
+              <div class="course-meta">
+                <span class="course-duration">
+                  <i class="far fa-clock"></i>
+                  {{ getFormattedDuration(cursoProgreso.curso.duracion_total_minutos) }}
+                </span>
+                
+                <span class="last-access">
+                  <i class="fas fa-eye"></i>
+                  {{ getFormattedLastAccess(cursoProgreso.progreso.fecha_ultimo_acceso) }}
+                </span>
+                
+                <span class="course-price" *ngIf="!cursoProgreso.curso.solo_suscripcion && cursoProgreso.curso.precio_individual > 0">
+                  ${{ cursoProgreso.curso.precio_individual }}
+                </span>
+                
+                <span class="course-subscription" *ngIf="cursoProgreso.curso.solo_suscripcion">
+                  Premium
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <ng-template #emptyCourses>
+          <div class="empty-state">
+            <i class="fas fa-graduation-cap"></i>
+            <p>No tienes cursos en tu historial</p>
+            <span class="empty-subtitle">Explora nuestro catálogo de cursos</span>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

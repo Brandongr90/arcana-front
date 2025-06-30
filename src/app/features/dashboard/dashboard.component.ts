@@ -1,25 +1,47 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { StorageService } from '../../core/services/storage.service';
-import { DashboardStats, QuickAction, RecentActivity } from '../../core/models/userInterface';
-import { HeaderComponent } from '../../shared/components/header/header.component';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
+import { StorageService } from '../../core/services/storage.service';
+import { DeviceDetectionService } from '../../core/services/device-detection.service';
+import { DashboardStats, QuickAction, RecentActivity } from '../../core/models/userInterface';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+import { MobileNavigationComponent } from '../../shared/mobile-navigation/mobile-navigation.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, HeaderComponent],
+  standalone: true,
+  imports: [
+    CommonModule, 
+    HeaderComponent, 
+    SidebarComponent, 
+    MobileNavigationComponent,
+    RouterOutlet
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  
+  // ========================================
+  // PROPIEDADES PRINCIPALES
+  // ========================================
+  
+  private destroy$ = new Subject<void>();
+  isMobile = false;
+  isInDashboardHome = false;
+  
   // Estado del usuario
   private user = signal<any>(null);
-
-  // Datos computados
   userName = computed(() => this.user()?.name || 'Viajero Espiritual');
 
-  // Estadísticas del dashboard
+  // ========================================
+  // DATOS DEL DASHBOARD
+  // ========================================
+
   stats = signal<DashboardStats>({
     completedCourses: 3,
     totalCourses: 12,
@@ -27,150 +49,166 @@ export class DashboardComponent implements OnInit {
     favoriteArticles: 8,
   });
 
-  // Mensaje del día
   dailyQuote = signal<string>(
     'Las estrellas se alinean para traerte sabiduría y claridad en tu camino.'
   );
 
-  // Acciones rápidas
   quickActions = signal<QuickAction[]>([
     {
-      title: 'Explorar Cursos',
-      description: 'Descubre nuevos conocimientos esotéricos',
-      icon: '📚',
-      route: '/courses',
-      color: 'rgba(52, 152, 219, 0.3)',
+      title: 'Lectura de Tarot',
+      description: 'Descubre lo que el universo tiene para ti',
+      icon: 'fas fa-cards',
+      color: 'bg-purple-600',
+      route: '/tarot',
     },
     {
-      title: 'Consultar Brujas',
-      description: 'Agenda una sesión personalizada',
-      icon: '🔮',
-      route: '/consultations',
-      color: 'rgba(155, 89, 182, 0.3)',
+      title: 'Consulta Astral',
+      description: 'Conecta con las energías cósmicas',
+      icon: 'fas fa-star',
+      color: 'bg-blue-600',
+      route: '/astrology',
     },
     {
-      title: 'Leer Artículos',
-      description: 'Contenido espiritual y místico',
-      icon: '📖',
-      route: '/content',
-      color: 'rgba(46, 204, 113, 0.3)',
-    },
-    {
-      title: 'Herramientas Místicas',
-      description: 'Tarot, runas y más',
-      icon: '✨',
-      route: '/tools',
-      color: 'rgba(241, 196, 15, 0.3)',
+      title: 'Meditación Guiada',
+      description: 'Encuentra paz interior y equilibrio',
+      icon: 'fas fa-leaf',
+      color: 'bg-green-600',
+      route: '/meditation',
     },
   ]);
 
-  // Actividades recientes
-  recentActivities = signal<RecentActivity[]>([
+  recentActivity = signal<RecentActivity[]>([
     {
       id: '1',
+      title: 'Completaste: Fundamentos del Tarot',
+      description: 'Has finalizado el curso básico de Tarot',
+      date: new Date('2024-03-15T10:30:00'),
       type: 'course',
-      title: 'Completaste: Introducción al Tarot',
-      description: 'Has terminado todas las lecciones del curso básico',
-      date: new Date(Date.now() - 86400000), // Ayer
-      icon: '🎓',
+      icon: 'fas fa-graduation-cap',
     },
     {
       id: '2',
-      type: 'tool',
-      title: 'Lectura de Runas Realizada',
-      description: 'Consultaste las runas sobre tu futuro profesional',
-      date: new Date(Date.now() - 172800000), // Hace 2 días
-      icon: 'ᚱ',
+      title: 'Nueva cita programada para mañana',
+      description: 'Consulta de Tarot con especialista',
+      date: new Date('2024-03-14T15:45:00'),
+      type: 'consultation',
+      icon: 'fas fa-calendar',
     },
     {
       id: '3',
+      title: 'Guardaste: Cristales para la Prosperidad',
+      description: 'Artículo sobre el poder de los cristales',
+      date: new Date('2024-03-13T09:20:00'),
       type: 'article',
-      title: 'Artículo Guardado',
-      description: 'Agregaste "El Poder de los Cristales" a favoritos',
-      date: new Date(Date.now() - 259200000), // Hace 3 días
-      icon: '⭐',
+      icon: 'fas fa-bookmark',
     },
   ]);
 
-  constructor(private router: Router, private storageService: StorageService) {}
+  constructor(
+    private router: Router,
+    private storageService: StorageService,
+    private deviceService: DeviceDetectionService
+  ) {}
+
+  // ========================================
+  // INICIALIZACIÓN Y DESTRUCCIÓN
+  // ========================================
 
   ngOnInit(): void {
     this.loadUserData();
-    this.loadDashboardData();
+    this.updateDailyQuote();
+    this.setupDeviceDetection();
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    )
+    .subscribe((event: NavigationEnd) => {
+      this.isInDashboardHome = event.url === '/dashboard/home' || event.url === '/home';
+    });
+  this.isInDashboardHome = this.router.url === '/dashboard/home' || this.router.url === '/home';
+}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
+
+  // ========================================
+  // GESTIÓN DE DISPOSITIVOS
+  // ========================================
+
+  private setupDeviceDetection(): void {
+    this.deviceService.isMobile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isMobile => {
+        this.isMobile = isMobile;
+        console.log('📱 Device changed in Dashboard:', isMobile ? 'Mobile' : 'Desktop');
+      });
+  }
+
+  // ========================================
+  // CARGA DE DATOS
+  // ========================================
 
   private loadUserData(): void {
-    const userData = this.storageService.getUser();
-    if (userData) {
-      this.user.set(userData);
+    const userData = this.storageService.getItem('arcana_user_profile');
+    if (userData?.data) {
+      this.user.set(userData.data);
     }
   }
 
-  private loadDashboardData(): void {
-    // En una aplicación real, aquí cargarías datos del servidor
-    // Por ahora usamos datos mock
-
-    // Cargar progreso de cursos desde storage
-    const progress = this.storageService.getUserPreferences();
-    if (progress.stats) {
-      this.stats.set(progress.stats);
-    }
-
-    // Generar frase del día basada en la fecha
-    this.generateDailyQuote();
-  }
-
-  private generateDailyQuote(): void {
+  private updateDailyQuote(): void {
     const quotes = [
       'Las estrellas se alinean para traerte sabiduría y claridad en tu camino.',
-      'Tu intuición es tu mejor guía en este momento de tu vida.',
-      'Las energías cósmicas favorecen tu crecimiento espiritual hoy.',
-      'La luna ilumina nuevas oportunidades en tu horizonte.',
-      'Los cristales amplifican tu energía positiva en este día especial.',
-      'Las cartas del tarot revelan secretos importantes para tu futuro.',
-      'Tu aura brilla con una luz especial que atrae la abundancia.',
-      'Los ancestros te envían mensajes de sabiduría a través de las runas.',
+      'Hoy el universo conspira a tu favor. Confía en tu intuición.',
+      'La energía lunar ilumina nuevas oportunidades en tu horizonte.',
+      'Tus chakras vibran en armonía. Es momento de manifestar tus deseos.',
+      'Los cristales resuenan con tu aura. Abraza la transformación.',
     ];
 
-    const today = new Date();
-    const dayOfYear = Math.floor(
-      (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-    const selectedQuote = quotes[dayOfYear % quotes.length];
-
+    const today = new Date().getDate();
+    const selectedQuote = quotes[today % quotes.length];
     this.dailyQuote.set(selectedQuote);
   }
 
-  navigateTo(route: string): void {
-    this.router.navigate([route]).catch((err) => {
-      console.error('Error navegando a:', route, err);
+  // ========================================
+  // ACCIONES DEL USUARIO
+  // ========================================
+
+  onQuickAction(action: QuickAction): void {
+    console.log('Quick action:', action.title);
+    this.router.navigate([action.route]).catch((err) => {
+      console.error('Navigation error:', err);
     });
   }
 
-  formatDate(date: Date): string {
-    const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
-    );
+  logout(): void {
+    this.storageService.clearAuthData();
+    this.router.navigate(['/auth/login']).catch((err) => {
+      console.error('Error en logout:', err);
+    });
+  }
 
-    if (diffInHours < 1) {
-      return 'Hace unos momentos';
+  // ========================================
+  // UTILIDADES
+  // ========================================
+
+  getRelativeTime(date: Date): string {
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMinutes / 60);
+
+    if (diffInMinutes < 1) {
+      return 'Ahora mismo';
+    } else if (diffInMinutes < 60) {
+      return `Hace ${diffInMinutes} minuto${diffInMinutes > 1 ? 's' : ''}`;
     } else if (diffInHours < 24) {
       return `Hace ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
     } else {
       const diffInDays = Math.floor(diffInHours / 24);
       return `Hace ${diffInDays} día${diffInDays > 1 ? 's' : ''}`;
     }
-  }
-
-  logout(): void {
-    // Limpiar datos de autenticación
-    this.storageService.clearAuthData();
-
-    // Redirigir al login
-    this.router.navigate(['/auth/login']).catch((err) => {
-      console.error('Error en logout:', err);
-    });
   }
 }

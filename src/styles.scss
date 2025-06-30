@@ -1,4 +1,9 @@
-@import "tailwindcss";
+@use "tailwindcss" as *;
+
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
 
 html {
   background-color: #100820 !important;

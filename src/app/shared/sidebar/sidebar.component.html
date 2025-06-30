@@ -1,0 +1,68 @@
+<!-- Contenedor Principal del Sidebar -->
+<aside
+  class="flex flex-col rounded-3xl w-full md:w-56 p-6 md:p-8 text-gray-400 select-none flex-shrink-0 sidebar-container"
+  style="border: 2px solid #423b51 !important"
+>
+  <!-- Sección del Logo -->
+  <div
+    [class]="getLogoClasses()"
+    [routerLink]="'/dashboard/home'"
+    [ngClass]="{ 'logo-active': isHomeActive }"
+    (click)="onLogoClick()"
+  >
+    <!-- Imagen del Logo -->
+    <img
+      alt="Arcana logo"
+      class="w-8 h-8 logo-image"
+      [ngClass]="{ 'logo-image-active': isHomeActive }"
+      height="32"
+      [src]="logoUrl"
+      width="32"
+      (error)="onLogoError($event)"
+    />
+
+    <!-- Texto del Logo -->
+    <span
+      class="font-semibold text-lg logo-text"
+      [ngClass]="{ 'logo-text-active': isHomeActive }"
+    >
+      {{ appName }}
+    </span>
+  </div>
+
+  <!-- Navegación Principal -->
+  <nav class="flex flex-col gap-4 text-sm font-medium menu-sections">
+    <!-- Secciones del Menú -->
+    <div
+      *ngFor="let section of menuSections; trackBy: trackBySection"
+      class="menu-section"
+    >
+      <!-- Título de la Sección -->
+      <h3 class="text-xs font-semibold text-gray-400 mb-2 section-title">
+        {{ section.title }}
+      </h3>
+
+      <!-- Items del Menú -->
+      <div class="flex flex-col gap-1">
+        <a
+          *ngFor="let item of section.items; trackBy: trackByItem"
+          [routerLink]="item.route || '/'"
+          [class]="getLinkClasses(item) + ' menu-item'"
+          [ngClass]="{ active: item.isActive }"
+          (click)="onMenuItemClick(item)"
+        >
+          <!-- Icono del Item -->
+          <i [class]="item.icon"></i>
+
+          <!-- Texto del Item -->
+          <span class="menu-text">{{ item.label }}</span>
+
+          <!-- Badge (si existe) -->
+          <span *ngIf="item.badge" class="ml-auto badge mystical-badge">
+            {{ item.badge }}
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</aside>

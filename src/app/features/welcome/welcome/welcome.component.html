@@ -1699,16 +1699,17 @@
     ></div>
   </div>
 
+  <!-- Contenedor Principal de la Página de Bienvenida -->
   <div class="relative z-10">
-    <!-- Navbar -->
+    <!-- Barra de Navegación Superior -->
     <nav
       class="navbar-container px-4 lg:px-8 py-4 lg:py-6 border-b"
       style="border-color: #3a3a5a"
     >
-      <!-- Enlaces de navegación (izquierda) -->
+      <!-- Enlaces de Navegación (Izquierda) -->
       <div class="navbar-left">
         <div class="flex flex-wrap justify-start space-x-4 lg:space-x-8">
-          <a
+          <!-- <a
             class="hover:text-white hover:underline transition-all duration-300 cursor-pointer text-sm lg:text-base"
             style="color: #b4a2fd"
             (click)="onNavigate('/daily-guidance')"
@@ -1728,11 +1729,11 @@
             (click)="onNavigate('/courses')"
           >
             Cursos
-          </a>
+          </a> -->
         </div>
       </div>
 
-      <!-- Logo central -->
+      <!-- Logo Central -->
       <div class="navbar-center">
         <div class="logo-container">
           <img
@@ -1743,7 +1744,7 @@
         </div>
       </div>
 
-      <!-- Botones de autenticación -->
+      <!-- Botones de Autenticación (Derecha) -->
       <div class="navbar-right">
         <div
           class="flex flex-wrap justify-end items-center space-x-2 lg:space-x-4"
@@ -1778,15 +1779,15 @@
       </div>
     </nav>
 
-    <!-- Hero Section con Iconos Profesionales -->
+    <!-- Sección Principal Hero -->
     <section
       class="flex flex-col items-center text-center px-4 lg:px-8 py-8 lg:py-16 max-w-6xl mx-auto"
     >
-      <!-- Cristal principal con Font Awesome -->
+      <!-- Cristal Principal con Efectos -->
       <div class="mb-6 lg:mb-10 relative crystal-container">
         <div class="relative inline-block">
           <img src="../../../../assets/welcomeImages/esfera.png" alt="" />
-          <!-- Partículas místicas -->
+          <!-- Partículas Místicas -->
           <div class="mystical-particles">
             <div class="particle particle-1"></div>
             <div class="particle particle-2"></div>
@@ -1796,15 +1797,16 @@
         </div>
       </div>
 
+      <!-- Título Principal -->
       <h1
-        class="text-4xl lg:text-6xl xl:text-7xl leading-tight font-normal max-w-4xl mb-6 lg:mb-8 text-glow"
+        class="text-3xl lg:text-6xl xl:text-7xl leading-tight font-normal max-w-4xl mb-6 lg:mb-8 text-glow"
         style="color: #b4a2fd"
       >
-        <!-- Luna profesional -->
+        <!-- Icono de Luna -->
         <img
           src="../../../../assets/welcomeImages/moon.png"
           alt="Luna"
-          class="inline-block align-middle mr-4 w-12 h-12 lg:w-20 lg:h-20"
+          class="inline-block align-middle w-12 h-12 lg:w-20 lg:h-20"
         />
         Despierta tu
         <em class="italic font-normal"> sabiduría interior</em>
@@ -1812,14 +1814,15 @@
         <br class="hidden sm:block" />
         <em class="italic font-normal">esoterismo</em>
         y crecimiento espiritual
-        <!-- Estrella profesional -->
+        <!-- Icono de Estrellas -->
         <img
           src="../../../../assets/welcomeImages/stars.png"
           alt="Luna"
-          class="inline-block align-middle mr-4 w-5 h-5 lg:w-15 lg:h-20"
+          class="inline-block align-middle mr-4 w-8 h-8 lg:w-15 lg:h-20"
         />
       </h1>
 
+      <!-- Descripción -->
       <p
         class="text-sm lg:text-lg xl:text-xl leading-relaxed max-w-3xl font-light mb-8"
         style="color: #b4a2fd"
@@ -1827,7 +1830,7 @@
         {{ welcomeData().description }}
       </p>
 
-      <!-- CTAs Principales -->
+      <!-- Botones de Acción Principales -->
       <div
         class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6"
       >
@@ -1848,7 +1851,7 @@
         </button>
       </div>
 
-      <!-- Accesos rápidos -->
+      <!-- Accesos Rápidos -->
       <div
         class="flex flex-col sm:flex-row items-center gap-4 text-sm mb-8 quick-access"
         style="color: #b4a2fd"
@@ -1872,7 +1875,7 @@
         </button>
       </div>
 
-      <!-- Trust Indicators -->
+      <!-- Indicadores de Confianza -->
       <div
         class="flex flex-wrap justify-center items-center gap-8 text-sm trust-indicators"
         style="color: #b4a2fd"
@@ -1892,7 +1895,7 @@
       </div>
     </section>
 
-    <!-- Services Tabs -->
+    <!-- Pestañas de Servicios -->
     <div
       class="grid grid-cols-2 lg:grid-cols-4 text-sm lg:text-base border-t border-b"
       style="border-color: #3a3a5a; color: #b4a2fd"
@@ -1914,12 +1917,12 @@
       </button>
     </div>
 
-    <!-- Services Content -->
+    <!-- Contenido de Servicios -->
     <section
       class="grid grid-cols-1 lg:grid-cols-2 p-6 lg:p-12 gap-6 lg:gap-12 min-h-[50vh]"
       style="background-color: #b4a2fd; color: #100820"
     >
-      <!-- Left Column - Service Details -->
+      <!-- Columna Izquierda - Detalles del Servicio -->
       <div
         class="lg:border-r lg:pr-8 xl:pr-12"
         style="border-color: rgba(16, 8, 32, 0.2)"
@@ -1951,7 +1954,10 @@
         </div>
       </div>
 
-      <!-- Right Column - Premium Benefits -->
+      <!-- Divisor simple solo para móviles -->
+      <hr *ngIf="isMobile" class="mobile-only-divider" />
+
+      <!-- Columna Derecha - Beneficios Premium -->
       <div class="lg:pl-8 xl:pl-12">
         <h2
           class="text-3xl lg:text-4xl xl:text-5xl font-normal mb-6 lg:mb-8"
@@ -1974,6 +1980,7 @@
           <li *ngFor="let benefit of premiumBenefits()">{{ benefit }}</li>
         </ul>
 
+        <!-- Sección de CTA Premium -->
         <div class="space-y-4 premium-cta-section">
           <div class="text-center">
             <div class="text-4xl font-bold mb-2">
@@ -2007,7 +2014,7 @@
       </div>
     </section>
 
-    <!-- Testimonials -->
+    <!-- Sección de Testimonios -->
     <section class="py-20 px-6">
       <div class="max-w-4xl mx-auto text-center">
         <h2
@@ -2017,6 +2024,7 @@
           Lo Que Dicen Nuestros Miembros
         </h2>
 
+        <!-- Contenedor de Testimonios -->
         <div
           class="relative overflow-hidden rounded-2xl p-8 border testimonials-container"
           style="
@@ -2024,6 +2032,7 @@
             border-color: #3a3a5a;
           "
         >
+          <!-- Slider de Testimonios -->
           <div
             class="flex transition-transform duration-500 ease-in-out testimonials-slider"
             [style.transform]="
@@ -2038,6 +2047,7 @@
               "
               class="w-full flex-shrink-0 px-4 testimonial-slide"
             >
+              <!-- Estrellas de Calificación -->
               <div class="flex justify-center mb-4">
                 <i
                   *ngFor="let star of getStarArray(testimonial.stars)"
@@ -2045,12 +2055,16 @@
                   style="color: #ffd700"
                 ></i>
               </div>
+
+              <!-- Texto del Testimonio -->
               <p
                 class="text-xl mb-6 leading-relaxed italic"
                 style="color: #b4a2fd"
               >
                 "{{ testimonial.text }}"
               </p>
+
+              <!-- Información del Usuario -->
               <div>
                 <p
                   class="font-semibold text-lg flex items-center justify-center gap-2"
@@ -2070,6 +2084,7 @@
             </div>
           </div>
 
+          <!-- Indicadores de Testimonios -->
           <div
             class="flex justify-center mt-8 space-x-2 testimonial-indicators"
           >
@@ -2086,22 +2101,27 @@
       </div>
     </section>
 
-    <!-- Final CTA -->
+    <!-- Llamada a la Acción Final -->
     <section
       class="py-20 px-6 border-t final-cta-section"
       style="border-color: #3a3a5a"
     >
       <div class="max-w-4xl mx-auto text-center">
+        <!-- Icono Principal -->
         <i
           class="fas fa-moon text-6xl mb-8 final-moon-icon"
           style="color: #b4a2fd"
         ></i>
+
+        <!-- Título Final -->
         <h2
           class="text-4xl md:text-5xl font-normal mb-6"
           style="color: #b4a2fd"
         >
           Tu Despertar Espiritual Te Espera
         </h2>
+
+        <!-- Descripción Final -->
         <p
           class="text-xl leading-relaxed mb-8 opacity-80"
           style="color: #b4a2fd"
@@ -2109,6 +2129,7 @@
           {{ finalCTA().description }}
         </p>
 
+        <!-- Botones de Acción Final -->
         <div
           class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8"
         >
@@ -2131,6 +2152,7 @@
           </button>
         </div>
 
+        <!-- Opciones Adicionales -->
         <div
           class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm"
           style="color: #b4a2fd"
